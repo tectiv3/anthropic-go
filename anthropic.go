@@ -26,8 +26,8 @@ var (
 	DefaultVersion       = "2023-06-01"
 )
 
-func New(opts ...Option) *Provider {
-	p := &Provider{
+func New(opts ...Option) *Client {
+	p := &Client{
 		apiKey:        os.Getenv("ANTHROPIC_API_KEY"),
 		endpoint:      DefaultEndpoint,
 		client:        DefaultClient,
@@ -45,11 +45,11 @@ func New(opts ...Option) *Provider {
 	return p
 }
 
-func (p *Provider) Name() string {
+func (p *Client) Name() string {
 	return ProviderName
 }
 
-func (p *Provider) Generate(ctx context.Context, messages Messages) (*Response, error) {
+func (p *Client) Generate(ctx context.Context, messages Messages) (*Response, error) {
 	var request Request
 	if err := p.applyRequestConfig(&request); err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ func (p *Provider) Generate(ctx context.Context, messages Messages) (*Response, 
 	return &result, nil
 }
 
-func (p *Provider) Stream(ctx context.Context, messages Messages) (*StreamIterator, error) {
+func (p *Client) Stream(ctx context.Context, messages Messages) (*StreamIterator, error) {
 	var request Request
 	if err := p.applyRequestConfig(&request); err != nil {
 		return nil, err
@@ -205,7 +205,7 @@ func convertMessages(messages []*Message) ([]*Message, error) {
 	return copied, nil
 }
 
-func (p *Provider) applyRequestConfig(req *Request) error {
+func (p *Client) applyRequestConfig(req *Request) error {
 	req.Model = p.model
 	req.MaxTokens = &p.maxTokens
 
@@ -256,7 +256,7 @@ func (p *Provider) applyRequestConfig(req *Request) error {
 }
 
 // createRequest creates an HTTP request with appropriate headers for Anthropic API calls
-func (p *Provider) createRequest(ctx context.Context, body []byte, isStreaming bool) (*http.Request, error) {
+func (p *Client) createRequest(ctx context.Context, body []byte, isStreaming bool) (*http.Request, error) {
 	req, err := http.NewRequestWithContext(ctx, "POST", p.endpoint, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
