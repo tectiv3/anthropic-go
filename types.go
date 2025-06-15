@@ -134,6 +134,27 @@ func WithVersion(version string) Option {
 	}
 }
 
+// WithTools sets the tools available to the client.
+func WithTools(tools ...ToolInterface) Option {
+	return func(p *Client) {
+		p.Tools = tools
+	}
+}
+
+// WithToolChoice sets the tool choice strategy for the client.
+func WithToolChoice(choice *ToolChoice) Option {
+	return func(p *Client) {
+		p.ToolChoice = choice
+	}
+}
+
+// WithSystemPrompt sets the system prompt for the client.
+func WithSystemPrompt(prompt string) Option {
+	return func(p *Client) {
+		p.SystemPrompt = prompt
+	}
+}
+
 type ClientError struct {
 	statusCode int
 	body       string

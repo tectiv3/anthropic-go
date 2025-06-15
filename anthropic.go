@@ -80,7 +80,7 @@ func (p *Client) Generate(ctx context.Context, messages Messages) (*Response, er
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
 			if resp.StatusCode == 429 {
-				log.Println("rate limit exceeded, status: %s, body: %s", resp.StatusCode, string(body))
+				log.Printf("rate limit exceeded, status: %d, body: %s", resp.StatusCode, string(body))
 			}
 			return NewError(resp.StatusCode, string(body))
 		}
@@ -131,7 +131,7 @@ func (p *Client) Stream(ctx context.Context, messages Messages) (*StreamIterator
 			body, _ := io.ReadAll(resp.Body)
 			resp.Body.Close()
 			if resp.StatusCode == 429 {
-				log.Println("rate limit exceeded, status: %s, body: %s", resp.StatusCode, string(body))
+				log.Printf("rate limit exceeded, status: %d, body: %s", resp.StatusCode, string(body))
 			}
 			return NewError(resp.StatusCode, string(body))
 		}
