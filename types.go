@@ -111,6 +111,12 @@ func WithMaxTokens(maxTokens int) Option {
 	}
 }
 
+func WithTemperature(temperature float64) Option {
+	return func(p *Client) {
+		p.Temperature = &temperature
+	}
+}
+
 func WithModel(model string) Option {
 	return func(p *Client) {
 		p.model = model
