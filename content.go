@@ -47,6 +47,13 @@ func (c ContentSourceType) String() string {
 	return string(c)
 }
 
+// SystemContent represents a content block in the system prompt array form.
+type SystemContent struct {
+	Type         string        `json:"type"`
+	Text         string        `json:"text"`
+	CacheControl *CacheControl `json:"cache_control,omitempty"`
+}
+
 // CacheControl is used to control caching of content blocks.
 type CacheControl struct {
 	Type CacheControlType `json:"type"`

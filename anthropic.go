@@ -250,10 +250,18 @@ func (p *Client) applyRequestConfig(req *Request) error {
 	}
 
 	req.Temperature = p.Temperature
-	req.System = p.SystemPrompt
 
 	if p.Caching != nil && *p.Caching {
-		req.CacheControl = &CacheControl{Type: CacheControlTypeEphemeral}
+		req.System = []SystemContent{{
+			Type:         "text",
+			Text:         p.SystemPrompt,
+			CacheControl: &CacheControl{Type: CacheControlTypeEphemeral},
+		}}
+		if len(req.Tools) > 0 {
+			req.Tools[len(req.Tools)-1]["cache_control"] = map[string]string{"type": "ephemeral"}
+		}
+	} else {
+		req.System = p.SystemPrompt
 	}
 
 	return nil
