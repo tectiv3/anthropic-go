@@ -45,16 +45,17 @@ type Thinking struct {
 }
 
 type Request struct {
-	Model       string            `json:"model"`
-	Messages    []*Message        `json:"messages"`
-	MaxTokens   *int              `json:"max_tokens,omitempty"`
-	Temperature *float64          `json:"temperature,omitempty"`
-	System      string            `json:"system,omitempty"`
-	Stream      bool              `json:"stream,omitempty"`
-	Tools       []map[string]any  `json:"tools,omitempty"`
-	ToolChoice  *ToolChoice       `json:"tool_choice,omitempty"`
-	Thinking    *Thinking         `json:"thinking,omitempty"`
-	MCPServers  []MCPServerConfig `json:"mcp_servers,omitempty"`
+	Model        string            `json:"model"`
+	Messages     []*Message        `json:"messages"`
+	MaxTokens    *int              `json:"max_tokens,omitempty"`
+	Temperature  *float64          `json:"temperature,omitempty"`
+	System       string            `json:"system,omitempty"`
+	Stream       bool              `json:"stream,omitempty"`
+	Tools        []map[string]any  `json:"tools,omitempty"`
+	ToolChoice   *ToolChoice       `json:"tool_choice,omitempty"`
+	Thinking     *Thinking         `json:"thinking,omitempty"`
+	MCPServers   []MCPServerConfig `json:"mcp_servers,omitempty"`
+	CacheControl *CacheControl     `json:"cache_control,omitempty"`
 }
 
 // Usage contains token usage information for an LLM response.

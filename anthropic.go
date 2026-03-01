@@ -252,6 +252,10 @@ func (p *Client) applyRequestConfig(req *Request) error {
 	req.Temperature = p.Temperature
 	req.System = p.SystemPrompt
 
+	if p.Caching != nil && *p.Caching {
+		req.CacheControl = &CacheControl{Type: CacheControlTypeEphemeral}
+	}
+
 	return nil
 }
 
