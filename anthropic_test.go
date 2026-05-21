@@ -22,8 +22,8 @@ func TestNew(t *testing.T) {
 		t.Errorf("Expected default max tokens %d, got %d", DefaultMaxTokens, client.maxTokens)
 	}
 
-	if client.endpoint != DefaultEndpoint {
-		t.Errorf("Expected default endpoint %q, got %q", DefaultEndpoint, client.endpoint)
+	if client.baseURL != DefaultBaseURL {
+		t.Errorf("Expected default endpoint %q, got %q", DefaultBaseURL, client.baseURL)
 	}
 
 	if client.version != DefaultVersion {
@@ -64,8 +64,8 @@ func TestNew_WithOptions(t *testing.T) {
 		t.Errorf("Expected max tokens %d, got %d", customMaxTokens, client.maxTokens)
 	}
 
-	if client.endpoint != customEndpoint {
-		t.Errorf("Expected endpoint %q, got %q", customEndpoint, client.endpoint)
+	if client.baseURL != customEndpoint {
+		t.Errorf("Expected baseURL %q, got %q", customEndpoint, client.baseURL)
 	}
 
 	if client.version != customVersion {

@@ -128,8 +128,8 @@ func TestWithEndpoint(t *testing.T) {
 	opt := WithEndpoint("https://custom-endpoint.com")
 	opt(client)
 
-	if client.endpoint != "https://custom-endpoint.com" {
-		t.Errorf("expected endpoint to be 'https://custom-endpoint.com', got %q", client.endpoint)
+	if client.baseURL != "https://custom-endpoint.com" {
+		t.Errorf("expected baseURL to be 'https://custom-endpoint.com', got %q", client.baseURL)
 	}
 }
 

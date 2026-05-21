@@ -3,6 +3,7 @@ package anthropic
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -93,9 +94,15 @@ func WithAPIKey(apiKey string) Option {
 	}
 }
 
+func WithBaseURL(baseURL string) Option {
+	return func(p *Client) {
+		p.baseURL = strings.TrimRight(baseURL, "/")
+	}
+}
+
 func WithEndpoint(endpoint string) Option {
 	return func(p *Client) {
-		p.endpoint = endpoint
+		p.baseURL = strings.TrimSuffix(strings.TrimRight(endpoint, "/"), "/messages")
 	}
 }
 
@@ -195,7 +202,7 @@ func ShouldRetry(statusCode int) bool {
 type Client struct {
 	client             *http.Client
 	apiKey             string
-	endpoint           string
+	baseURL            string
 	model              string
 	maxTokens          int
 	maxRetries         int

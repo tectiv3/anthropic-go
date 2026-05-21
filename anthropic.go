@@ -18,7 +18,7 @@ const ProviderName = "anthropic"
 
 var (
 	DefaultModel         = "claude-sonnet-4-20250514"
-	DefaultEndpoint      = "https://api.anthropic.com/v1/messages"
+	DefaultBaseURL       = "https://api.anthropic.com/v1"
 	DefaultMaxTokens     = 4096
 	DefaultClient        = &http.Client{Timeout: 300 * time.Second}
 	DefaultMaxRetries    = 6
@@ -29,7 +29,7 @@ var (
 func New(opts ...Option) *Client {
 	p := &Client{
 		apiKey:        os.Getenv("ANTHROPIC_API_KEY"),
-		endpoint:      DefaultEndpoint,
+		baseURL:       DefaultBaseURL,
 		client:        DefaultClient,
 		model:         DefaultModel,
 		maxTokens:     DefaultMaxTokens,
@@ -67,7 +67,7 @@ func (p *Client) Generate(ctx context.Context, messages Messages) (*Response, er
 
 	var result Response
 	err = retry.Do(ctx, func() error {
-		req, err := p.createRequest(ctx, body, false)
+		req, err := p.createRequest(ctx, "POST", "/messages", body, false)
 		if err != nil {
 			return err
 		}
@@ -119,7 +119,7 @@ func (p *Client) Stream(ctx context.Context, messages Messages) (*StreamIterator
 
 	var stream *StreamIterator
 	err = retry.Do(ctx, func() error {
-		req, err := p.createRequest(ctx, body, true)
+		req, err := p.createRequest(ctx, "POST", "/messages", body, true)
 		if err != nil {
 			return err
 		}
@@ -267,18 +267,26 @@ func (p *Client) applyRequestConfig(req *Request) error {
 	return nil
 }
 
-// createRequest creates an HTTP request with appropriate headers for Anthropic API calls
-func (p *Client) createRequest(ctx context.Context, body []byte, isStreaming bool) (*http.Request, error) {
-	req, err := http.NewRequestWithContext(ctx, "POST", p.endpoint, bytes.NewBuffer(body))
+func (p *Client) createRequest(ctx context.Context, method, path string, body []byte, isStreaming bool) (*http.Request, error) {
+	url := p.baseURL + path
+	var bodyReader io.Reader
+	if body != nil {
+		bodyReader = bytes.NewBuffer(body)
+	}
+	req, err := http.NewRequestWithContext(ctx, method, url, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("x-api-key", p.apiKey)
 	req.Header.Set("anthropic-version", p.version)
-	req.Header.Set("content-type", "application/json")
 
+	if body != nil {
+		req.Header.Set("content-type", "application/json")
+	}
 	if isStreaming {
 		req.Header.Set("accept", "text/event-stream")
+	} else {
+		req.Header.Set("accept", "application/json")
 	}
 
 	for key, values := range p.RequestHeaders {
