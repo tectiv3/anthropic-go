@@ -251,6 +251,15 @@ func (p *Client) applyRequestConfig(req *Request) error {
 
 	req.Temperature = p.Temperature
 
+	if p.ReasoningBudget != nil {
+		if *p.ReasoningBudget == 0 {
+			req.Thinking = &Thinking{Type: "disabled"}
+		} else {
+			req.Thinking = &Thinking{Type: "enabled", BudgetTokens: *p.ReasoningBudget}
+		}
+		req.Temperature = nil
+	}
+
 	if p.Caching != nil && *p.Caching {
 		req.System = []SystemContent{{
 			Type:         "text",

@@ -41,8 +41,8 @@ type ImageSource struct {
 }
 
 type Thinking struct {
-	Type         string `json:"type"` // "enabled"
-	BudgetTokens int    `json:"budget_tokens"`
+	Type         string `json:"type"`
+	BudgetTokens int    `json:"budget_tokens,omitempty"`
 }
 
 type Request struct {
