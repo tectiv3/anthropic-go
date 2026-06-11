@@ -226,6 +226,7 @@ type Client struct {
 	FrequencyPenalty   *float64                 `json:"frequency_penalty,omitempty"`
 	ReasoningBudget    *int                     `json:"reasoning_budget,omitempty"`
 	ReasoningEffort    ReasoningEffort          `json:"reasoning_effort,omitempty"`
+	AdaptiveThinking   bool                     `json:"-"`
 	Features           []string                 `json:"features,omitempty"`
 	RequestHeaders     http.Header              `json:"request_headers,omitempty"`
 	Caching            *bool                    `json:"caching,omitempty"`

@@ -251,10 +251,12 @@ func (p *Client) applyRequestConfig(req *Request) error {
 
 	req.Temperature = p.Temperature
 
-	if p.ReasoningEffort.IsValid() {
+	if p.AdaptiveThinking || p.ReasoningEffort.IsValid() {
 		req.Thinking = &Thinking{Type: "adaptive"}
-		req.OutputConfig = &OutputConfig{Effort: p.ReasoningEffort}
 		req.Temperature = nil
+		if p.ReasoningEffort.IsValid() {
+			req.OutputConfig = &OutputConfig{Effort: p.ReasoningEffort}
+		}
 	} else if p.ReasoningBudget != nil {
 		if *p.ReasoningBudget == 0 {
 			req.Thinking = &Thinking{Type: "disabled"}
