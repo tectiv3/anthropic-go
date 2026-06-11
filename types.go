@@ -45,6 +45,10 @@ type Thinking struct {
 	BudgetTokens int    `json:"budget_tokens,omitempty"`
 }
 
+type OutputConfig struct {
+	Effort ReasoningEffort `json:"effort,omitempty"`
+}
+
 type Request struct {
 	Model        string            `json:"model"`
 	Messages     []*Message        `json:"messages"`
@@ -55,6 +59,7 @@ type Request struct {
 	Tools        []map[string]any  `json:"tools,omitempty"`
 	ToolChoice   *ToolChoice       `json:"tool_choice,omitempty"`
 	Thinking     *Thinking         `json:"thinking,omitempty"`
+	OutputConfig *OutputConfig     `json:"output_config,omitempty"`
 	MCPServers   []MCPServerConfig `json:"mcp_servers,omitempty"`
 	CacheControl *CacheControl     `json:"cache_control,omitempty"`
 }
